@@ -1,14 +1,9 @@
-use winapi::shared::windef::POINT;
-use winapi::um::winuser::GetCursorPos;
-use winapi::um::winuser::INPUT;
-use winapi::um::winuser::LPINPUT;
-use winapi::um::winuser::MOUSEINPUT;
-use winapi::um::winuser::SendInput;
-
 // TODO: Consider using GetCursorInfo, GetCursorPos, GetCursor, & GetPhysicalCursorPos
 
 #[unsafe(no_mangle)]
 pub extern "stdcall" fn mmv(dx: i32, dy: i32) {
+    use winapi::um::winuser::{INPUT, LPINPUT, MOUSEINPUT, SendInput};
+
     let mouse_input = MOUSEINPUT {
         dx,
         dy,
@@ -43,6 +38,9 @@ pub struct RetPoint {
 
 #[unsafe(no_mangle)]
 pub extern "stdcall" fn get_cursor_pos() -> RetPoint {
+    use winapi::shared::windef::POINT;
+    use winapi::um::winuser::GetCursorPos;
+
     let mut point = POINT { x: 0, y: 0 };
 
     unsafe {
