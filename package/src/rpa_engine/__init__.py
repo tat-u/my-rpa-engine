@@ -3,8 +3,9 @@ import importlib.resources as resources
 import shutil
 import tempfile
 
+ENGINE_DLL_NAME = "engine.dll"
 
-with resources.files("rpa_engine").joinpath("rpa_engine_core.dll").open("rb") as bin:
+with resources.files("rpa_engine").joinpath(ENGINE_DLL_NAME).open("rb") as bin:
     with tempfile.NamedTemporaryFile(delete=False, suffix=".dll") as tmp:
         shutil.copyfileobj(bin, tmp)
         dll_path = tmp.name
