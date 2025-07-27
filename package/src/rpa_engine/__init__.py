@@ -3,16 +3,13 @@ import importlib.resources as resources
 import shutil
 import tempfile
 
-dll_path = ""
 
 with resources.files("rpa_engine").joinpath("rpa_engine_core.dll").open("rb") as bin:
-    dll = ctypes.cdll.LoadLibrary(bin.name)
     with tempfile.NamedTemporaryFile(delete=False, suffix=".dll") as tmp:
         shutil.copyfileobj(bin, tmp)
         dll_path = tmp.name
 
-
-# FIXME: `WinDLL` class vs `windll: LibraryLoader[WinDLL]`
+# NOTE: Use WinDLL instead of windll as the latter could pollutes caches
 dll = ctypes.WinDLL(dll_path)
 
 
