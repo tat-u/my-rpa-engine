@@ -17,11 +17,11 @@ pub extern "stdcall" fn mmv(dx: i32, dy: i32) -> i32 {
         u: unsafe { std::mem::transmute(mouse_input) }, // union
     };
 
-    let cinputs = 1; // Number of inputs to send
+    let cinputs = 1 as u32; // Number of inputs to send
     let pinputs = &mut input as *mut INPUT;
-    let cbsize = std::mem::size_of::<INPUT>();
+    let cbsize = std::mem::size_of::<INPUT>() as i32;
 
-    unsafe { SendInput(cinputs, pinputs, cbsize as i32) as i32 }
+    unsafe { SendInput(cinputs, pinputs, cbsize) as i32 }
 }
 
 // FIXME: Below code is not tested yet, needs to be verified
