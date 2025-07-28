@@ -1,5 +1,7 @@
 // TODO: Consider using GetCursorInfo, GetCursorPos, GetCursor, & GetPhysicalCursorPos
 
+// TODO: pub extern "system" ?
+
 #[unsafe(no_mangle)]
 pub extern "stdcall" fn mmv(dx: i32, dy: i32) -> i32 {
     use winapi::um::winuser::{INPUT, MOUSEINPUT, SendInput};
