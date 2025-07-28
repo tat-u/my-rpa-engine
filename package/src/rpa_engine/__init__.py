@@ -1,5 +1,5 @@
 import ctypes
-from ctypes import c_int
+from ctypes import c_int32
 import importlib.resources as resources
 import shutil
 import tempfile
@@ -14,8 +14,8 @@ with resources.files("rpa_engine").joinpath(ENGINE_DLL_NAME).open("rb") as bin:
 # NOTE: Use WinDLL instead of windll as the latter could pollutes caches
 dll = ctypes.WinDLL(dll_path)
 
-dll.mmv.argtypes = [c_int, c_int]
-dll.mmv.restype = c_int
+dll.mmv.argtypes = [c_int32, c_int32]
+dll.mmv.restype = c_int32
 
 
 def mmv(dx: int, dy: int) -> None:
