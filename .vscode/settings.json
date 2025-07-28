@@ -1,5 +1,11 @@
 {
   "[python]": {
     "editor.tabSize": 4
+  },
+  "[rust]": {
+    "editor.tabSize": 4
+  },
+  "[makefile]": {
+    "editor.tabSize": 4
   }
 }
