@@ -3,7 +3,7 @@
 // TODO: pub extern "system" ?
 
 #[unsafe(no_mangle)]
-pub extern "stdcall" fn mov(dx: i32, dy: i32) -> i32 {
+pub extern "stdcall" fn mov_rel(dx: i32, dy: i32) -> i32 {
     use winapi::um::winuser::{INPUT, INPUT_MOUSE, MOUSEEVENTF_MOVE, MOUSEINPUT, SendInput};
 
     let mouse_input = MOUSEINPUT {
@@ -27,7 +27,14 @@ pub extern "stdcall" fn mov(dx: i32, dy: i32) -> i32 {
 }
 
 #[unsafe(no_mangle)]
-pub extern "stdcall" fn mov_to(x: i32, y: i32) -> i32 {
+pub extern "stdcall" fn mov_abs_scp(x: i32, y: i32) -> bool {
+    use winapi::um::winuser::SetCursorPos;
+
+    unsafe { SetCursorPos(x, y) != 0 }
+}
+
+#[unsafe(no_mangle)]
+pub extern "stdcall" fn mov_abs_si(x: i32, y: i32) -> i32 {
     use crate::screen::{get_scr_h, get_scr_w};
     use winapi::um::winuser::{
         INPUT, INPUT_MOUSE, MOUSEEVENTF_ABSOLUTE, MOUSEEVENTF_MOVE, MOUSEINPUT, SendInput,
