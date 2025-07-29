@@ -20,4 +20,11 @@ fn main() {
         let r = mouse::get_cur_pos();
         println!("Mouse position: ({}, {})", r.x, r.y);
     };
+    {
+        let spd = mouse::get_cur_spd();
+        println!("Mouse speed: {}", spd);
+    }
+    {
+        mouse::clk_l();
+    }
 }
