@@ -4,18 +4,18 @@
 
 #[unsafe(no_mangle)]
 pub extern "stdcall" fn mov(dx: i32, dy: i32) -> i32 {
-    use winapi::um::winuser::{INPUT, MOUSEINPUT, SendInput};
+    use winapi::um::winuser::{INPUT, INPUT_MOUSE, MOUSEEVENTF_MOVE, MOUSEINPUT, SendInput};
 
     let mouse_input = MOUSEINPUT {
         dx,
         dy,
         mouseData: 0x0,
-        dwFlags: 0x0001, // MOUSEEVENTF_MOVE
+        dwFlags: MOUSEEVENTF_MOVE,
         time: 0x0,
         dwExtraInfo: 0x0,
     };
     let mut input = INPUT {
-        type_: 0,                                       // INPUT_MOUSE
+        type_: INPUT_MOUSE,
         u: unsafe { std::mem::transmute(mouse_input) }, // union
     };
 
@@ -32,7 +32,7 @@ pub extern "stdcall" fn mov(dx: i32, dy: i32) -> i32 {
 pub extern "stdcall" fn mov_to(x: i32, y: i32) -> i32 {
     use crate::screen::{get_scr_h, get_scr_w};
     use winapi::um::winuser::{
-        INPUT, MOUSEEVENTF_ABSOLUTE, MOUSEEVENTF_MOVE, MOUSEINPUT, SendInput,
+        INPUT, INPUT_MOUSE, MOUSEEVENTF_ABSOLUTE, MOUSEEVENTF_MOVE, MOUSEINPUT, SendInput,
     };
 
     let scr_w = get_scr_w(); // screen width
@@ -42,12 +42,12 @@ pub extern "stdcall" fn mov_to(x: i32, y: i32) -> i32 {
         dx: (x * 65536 + scr_w - 1) / scr_w,
         dy: (y * 65536 + scr_h - 1) / scr_h,
         mouseData: 0x0,
-        dwFlags: MOUSEEVENTF_ABSOLUTE + MOUSEEVENTF_MOVE,
+        dwFlags: MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE,
         time: 0x0,
         dwExtraInfo: 0x0,
     };
     let mut input = INPUT {
-        type_: 0,                                       // INPUT_MOUSE
+        type_: INPUT_MOUSE,
         u: unsafe { std::mem::transmute(mouse_input) }, // union
     };
 
