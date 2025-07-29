@@ -2,6 +2,8 @@
 
 // TODO: pub extern "system" ?
 
+use crate::structs::Vec2;
+
 #[unsafe(no_mangle)]
 pub extern "stdcall" fn mov_rel(dx: i32, dy: i32) -> i32 {
     use winapi::um::winuser::{INPUT, INPUT_MOUSE, MOUSEEVENTF_MOVE, MOUSEINPUT, SendInput};
@@ -63,15 +65,8 @@ pub extern "stdcall" fn mov_abs_si(x: i32, y: i32) -> i32 {
     unsafe { SendInput(cinputs, pinputs, cbsize) as i32 }
 }
 
-// FIXME: Below code is not tested yet, needs to be verified
-#[repr(C)]
-pub struct RetPoint {
-    pub x: i32,
-    pub y: i32,
-}
-
 #[unsafe(no_mangle)]
-pub extern "stdcall" fn get_cursor_pos() -> RetPoint {
+pub extern "stdcall" fn get_cur_pos() -> Vec2 {
     use winapi::shared::windef::POINT;
     use winapi::um::winuser::GetCursorPos;
 
@@ -81,7 +76,7 @@ pub extern "stdcall" fn get_cursor_pos() -> RetPoint {
         GetCursorPos(&mut point);
     }
 
-    RetPoint {
+    Vec2 {
         x: point.x,
         y: point.y,
     }
