@@ -26,8 +26,6 @@ pub extern "stdcall" fn mov(dx: i32, dy: i32) -> i32 {
     unsafe { SendInput(cinputs, pinputs, cbsize) as i32 }
 }
 
-// https://qiita.com/kob58im/items/23df9e22778b33986d1c#44-%E7%B5%90%E8%AB%96%E6%AD%A3%E7%A2%BA%E3%81%AB%E5%A4%89%E6%8F%9B%E3%81%A7%E3%81%8D%E3%82%8B%E3%81%A7%E3%81%82%E3%82%8D%E3%81%86%E3%82%B3%E3%83%BC%E3%83%89
-
 #[unsafe(no_mangle)]
 pub extern "stdcall" fn mov_to(x: i32, y: i32) -> i32 {
     use crate::screen::{get_scr_h, get_scr_w};
