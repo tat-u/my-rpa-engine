@@ -1,8 +1,48 @@
 // TODO: Consider using GetCursorInfo, GetCursorPos, GetCursor, & GetPhysicalCursorPos
 
-// TODO: pub extern "system" ?
-
 use crate::structs::Vec2;
+use core::panic;
+
+#[unsafe(no_mangle)]
+pub extern "system" fn btn(button: i32, down: bool) -> i32 {
+    use std::mem::size_of;
+    use winapi::um::winuser::{
+        INPUT, INPUT_MOUSE, MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP, MOUSEEVENTF_MIDDLEDOWN,
+        MOUSEEVENTF_MIDDLEUP, MOUSEEVENTF_RIGHTDOWN, MOUSEEVENTF_RIGHTUP, MOUSEINPUT, SendInput,
+    };
+
+    let dwflags: u32 = match down {
+        true => match button {
+            1 => MOUSEEVENTF_LEFTDOWN,
+            2 => MOUSEEVENTF_RIGHTDOWN,
+            3 => MOUSEEVENTF_MIDDLEDOWN,
+            _ => panic!("Invalid button: {}", button),
+        },
+        false => match button {
+            1 => MOUSEEVENTF_LEFTUP,
+            2 => MOUSEEVENTF_RIGHTUP,
+            3 => MOUSEEVENTF_MIDDLEUP,
+            _ => panic!("Invalid button: {}", button),
+        },
+    };
+
+    let mouse_input = MOUSEINPUT {
+        dx: 0,
+        dy: 0,
+        mouseData: 0x0,
+        dwFlags: dwflags,
+        time: 0x0,
+        dwExtraInfo: 0x0,
+    };
+    let mut input = INPUT {
+        type_: INPUT_MOUSE,
+        u: unsafe { std::mem::transmute(mouse_input) },
+    };
+
+    let pinputs = &mut input as *mut INPUT;
+
+    unsafe { SendInput(1, pinputs, size_of::<INPUT>() as i32) as i32 }
+}
 
 #[unsafe(no_mangle)]
 pub extern "system" fn mov_rel(dx: i32, dy: i32) -> i32 {
