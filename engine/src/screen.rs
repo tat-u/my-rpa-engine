@@ -1,13 +1,8 @@
-#[unsafe(no_mangle)]
-pub extern "system" fn get_scr_w() -> i32 {
-    use winapi::um::winuser::GetSystemMetrics;
-
-    unsafe { GetSystemMetrics(0) } // SM_CXSCREEN
-}
+use crate::structs::Vec2;
 
 #[unsafe(no_mangle)]
-pub extern "system" fn get_scr_h() -> i32 {
-    use winapi::um::winuser::GetSystemMetrics;
+pub extern "system" fn get_scr_wh() -> Vec2 {
+    use winapi::um::winuser::{GetSystemMetrics, SM_CXSCREEN, SM_CYSCREEN};
 
-    unsafe { GetSystemMetrics(1) } // SM_CYSCREEN
+    unsafe { Vec2::new(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)) }
 }

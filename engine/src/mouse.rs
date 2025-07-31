@@ -37,17 +37,18 @@ pub extern "system" fn mov_abs_scp(x: i32, y: i32) -> bool {
 
 #[unsafe(no_mangle)]
 pub extern "system" fn mov_abs_si(x: i32, y: i32) -> i32 {
-    use crate::screen::{get_scr_h, get_scr_w};
+    use crate::screen::get_scr_wh;
     use winapi::um::winuser::{
         INPUT, INPUT_MOUSE, MOUSEEVENTF_ABSOLUTE, MOUSEEVENTF_MOVE, MOUSEINPUT, SendInput,
     };
 
-    let scr_w = get_scr_w(); // screen width
-    let scr_h = get_scr_h(); // screen height
+    let scr_wh = get_scr_wh();
+    let w = scr_wh.x;
+    let h = scr_wh.y;
 
     let mouse_input = MOUSEINPUT {
-        dx: (x * 65536 + scr_w - 1) / scr_w,
-        dy: (y * 65536 + scr_h - 1) / scr_h,
+        dx: (x * 65536 + w - 1) / w,
+        dy: (y * 65536 + h - 1) / h,
         mouseData: 0x0,
         dwFlags: MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE,
         time: 0x0,
