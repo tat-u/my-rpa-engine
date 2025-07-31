@@ -4,7 +4,7 @@ use crate::structs::Vec2;
 use core::panic;
 
 #[unsafe(no_mangle)]
-pub extern "system" fn btn(button: i32, down: bool) -> i32 {
+pub extern "system" fn btn(button: u32, down: bool) -> i32 {
     use std::mem::size_of;
     use winapi::um::winuser::{
         INPUT, INPUT_MOUSE, MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP, MOUSEEVENTF_MIDDLEDOWN,
@@ -107,16 +107,31 @@ pub extern "system" fn mov_abs_si(x: i32, y: i32) -> i32 {
 }
 
 #[unsafe(no_mangle)]
-pub extern "system" fn clk_l() -> i32 {
+pub extern "system" fn clk(button: u32) -> i32 {
+    use std::mem::size_of;
     use winapi::um::winuser::{
-        INPUT, INPUT_MOUSE, MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP, MOUSEINPUT, SendInput,
+        INPUT, INPUT_MOUSE, MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP, MOUSEEVENTF_MIDDLEDOWN,
+        MOUSEEVENTF_MIDDLEUP, MOUSEEVENTF_RIGHTDOWN, MOUSEEVENTF_RIGHTUP, MOUSEINPUT, SendInput,
+    };
+
+    let dwflags1: u32 = match button {
+        1 => MOUSEEVENTF_LEFTDOWN,
+        2 => MOUSEEVENTF_RIGHTDOWN,
+        3 => MOUSEEVENTF_MIDDLEDOWN,
+        _ => panic!("Invalid button: {}", button),
+    };
+    let dwflags2: u32 = match button {
+        1 => MOUSEEVENTF_LEFTUP,
+        2 => MOUSEEVENTF_RIGHTUP,
+        3 => MOUSEEVENTF_MIDDLEUP,
+        _ => panic!("Invalid button: {}", button),
     };
 
     let mouse_input_1 = MOUSEINPUT {
         dx: 0,
         dy: 0,
         mouseData: 0x0,
-        dwFlags: MOUSEEVENTF_LEFTDOWN,
+        dwFlags: dwflags1,
         time: 0x0,
         dwExtraInfo: 0x0,
     };
@@ -124,7 +139,7 @@ pub extern "system" fn clk_l() -> i32 {
         dx: 0,
         dy: 0,
         mouseData: 0x0,
-        dwFlags: MOUSEEVENTF_LEFTUP,
+        dwFlags: dwflags2,
         time: 0x0,
         dwExtraInfo: 0x0,
     };
@@ -139,11 +154,9 @@ pub extern "system" fn clk_l() -> i32 {
         },
     ];
 
-    let cinputs = 2 as u32; // Number of inputs to send
     let pinputs = &mut inputs as *mut INPUT;
-    let cbsize = std::mem::size_of::<INPUT>() as i32;
 
-    unsafe { SendInput(cinputs, pinputs, cbsize) as i32 }
+    unsafe { SendInput(2, pinputs, size_of::<INPUT>() as i32) as i32 }
 }
 
 #[unsafe(no_mangle)]
