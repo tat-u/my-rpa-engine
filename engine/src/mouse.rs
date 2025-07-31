@@ -82,9 +82,9 @@ pub extern "system" fn mov_abs_si(x: i32, y: i32) -> i32 {
         INPUT, INPUT_MOUSE, MOUSEEVENTF_ABSOLUTE, MOUSEEVENTF_MOVE, MOUSEINPUT, SendInput,
     };
 
-    let scr_wh = get_scr_wh();
-    let w = scr_wh.x;
-    let h = scr_wh.y;
+    let wh = get_scr_wh();
+    let w = wh.w;
+    let h = wh.h;
 
     let mouse_input = MOUSEINPUT {
         dx: (x * 65536 + w - 1) / w,
